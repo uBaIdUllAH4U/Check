@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>My LLM V6.2 • Voice + Experiential Labs</title>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;height:100vh;overflow:hidden;font-family:Inter,Arial,sans-serif;color:#171717;background:#fff}.app{height:100%;display:flex;flex-direction:column}
+header{height:64px;border-bottom:1px solid #e7e7e7;display:flex;align-items:center;justify-content:space-between;padding:0 20px}.brand{display:flex;align-items:center;gap:10px}.logo,.welcomeLogo{background:#111;color:#fff;display:grid;place-items:center;font-weight:700}.logo{width:32px;height:32px;border-radius:9px;font-size:10px}.name{font-size:15px;font-weight:600}.controls{display:flex;gap:7px;align-items:center}select,button{height:36px;border:1px solid #ddd;border-radius:9px;background:#fff;color:#333;font:inherit;font-size:12px;cursor:pointer}select{padding:0 9px;max-width:210px}button{padding:0 12px}button:hover,select:hover{background:#f6f6f6}.live{border-radius:20px;display:flex;gap:6px;align-items:center}.dotLive{width:7px;height:7px;border-radius:50%;background:#aaa}.live.on .dotLive{background:#20a060;box-shadow:0 0 0 3px #e9f8f0}#voice.active,#speak.active{background:#111;color:#fff}#voice.listening{background:#d33;color:#fff;border-color:#d33}
+main{flex:1;overflow-y:auto;padding:40px 18px 150px}.chat{max-width:820px;margin:auto}.welcome{min-height:55vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}.welcomeLogo{width:50px;height:50px;border-radius:14px;margin-bottom:18px}.welcome h1{font-size:30px;margin:0;font-weight:600}.welcome p{font-size:14px;color:#999}.status{font-size:11px;color:#aaa}.msg{display:flex;gap:13px;margin-bottom:30px}.avatar{width:32px;height:32px;min-width:32px;border-radius:9px;display:grid;place-items:center;font-size:9px;font-weight:700}.you{background:#eee;color:#444}.ai{background:#111;color:#fff}.body{min-width:0;flex:1}.content{font-size:15px;line-height:1.7;overflow-wrap:anywhere}.userText{white-space:pre-wrap}.markdown h1,.markdown h2,.markdown h3,.markdown h4{line-height:1.3;margin:22px 0 10px}.markdown h1{font-size:28px}.markdown h2{font-size:23px}.markdown h3{font-size:19px}.markdown p{margin:0 0 13px}.markdown ul,.markdown ol{padding-left:27px}.markdown li{margin:5px 0}.markdown blockquote{border-left:3px solid #ccc;background:#fafafa;padding:8px 15px;color:#666}.markdown hr{border:0;border-top:1px solid #e5e5e5;margin:22px 0}.markdown table{width:100%;border-collapse:collapse;margin:15px 0;display:block;overflow:auto}.markdown th,.markdown td{border:1px solid #ddd;padding:8px 10px}.markdown th{background:#f4f4f4}.markdown a{color:#222}.markdown :not(pre)>code{background:#f1f1f1;border:1px solid #e5e5e5;border-radius:5px;padding:2px 6px}.code{border:1px solid #ddd;border-radius:11px;overflow:hidden;margin:15px 0}.codeHead{height:38px;background:#f3f3f3;border-bottom:1px solid #ddd;display:flex;justify-content:space-between;align-items:center;padding:0 10px}.codeHead span{font-size:11px;color:#777}.copy{border:0;background:transparent;font-size:11px}.code pre{margin:0;padding:15px;background:#fafafa;overflow:auto}.code pre code{font:13px/1.65 Consolas,monospace}.actions{margin-top:7px}.copyResponse{border:0;background:transparent;color:#666;font-size:11px}.sources{margin-top:14px;border-top:1px solid #eee;padding-top:10px}.sourcesTitle{font-size:11px;color:#777;margin-bottom:7px}.source{display:block;text-decoration:none;color:#222;border:1px solid #e5e5e5;border-radius:9px;padding:8px 10px;margin:5px 0;font-size:12px}.source small{display:block;color:#999;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:3px}.error{color:#9d2118;background:#fff5f4;border:1px solid #ffd8d3;border-radius:9px;padding:10px 12px;font-size:13px}.typing{display:flex;gap:5px}.typing i{width:6px;height:6px;background:#999;border-radius:50%;animation:b 1.2s infinite}.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}@keyframes b{0%,60%,100%{transform:none}30%{transform:translateY(-5px)}}
+.inputArea{position:fixed;bottom:0;left:0;right:0;padding:18px;background:linear-gradient(to top,#fff 72%,transparent)}.inputBox{max-width:820px;margin:auto;border:1px solid #d9d9d9;border-radius:16px;padding:8px;display:flex;background:#fff;box-shadow:0 4px 20px #0000000d}.inputBox:focus-within{border-color:#aaa}textarea{flex:1;resize:none;border:0;outline:0;padding:11px 12px;font:15px inherit;min-height:44px;max-height:150px}.send{width:42px;height:42px;background:#111;color:#fff;border:0;border-radius:11px;font-size:16px}
+@media(max-width:720px){header{padding:0 10px}.controls{gap:3px}select{max-width:125px}.api{max-width:105px}.live{display:none}.new{font-size:0;width:35px;padding:0}.new:after{content:"+";font-size:18px}main{padding:30px 13px 145px}.content,.markdown{font-size:14px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+<div class="brand"><div class="logo">AI</div><span class="name">My LLM</span></div>
+<div class="controls">
+<button class="new" id="new">New chat</button>
+<select class="api" id="apis" title="Choose Groq or Experiential Labs API"></select>
+<select id="models"><option>Loading...</option></select>
+<button id="voice" title="Voice input">🎙️</button><button id="speak" title="Auto-read AI replies">🔊</button><button class="live" id="live"><span class="dotLive"></span>Live</button>
+</div>
+</header>
+<main id="main"><div class="chat" id="chat">
+<div class="welcome" id="welcome"><div class="welcomeLogo">AI</div><h1>How can I help?</h1><p>Ask anything. Turn on Live for current information.</p><div class="status" id="status">Ready</div></div>
+</div></main>
+<div class="inputArea"><div class="inputBox"><textarea id="input" rows="1" placeholder="Message your AI..."></textarea><button class="send" id="send">➤</button></div></div>
+</div>
+
+<script>
+/* ================= MULTIPLE GROQ API PROFILES ================= */
+const DEFAULT_APIS=[
+{id:"groq1",provider:"groq",name:"Groq API 1",base:"https://api.groq.com/openai/v1",key:""},
+{id:"groq2",provider:"groq",name:"Groq API 2",base:"https://api.groq.com/openai/v1",key:""},
+{id:"experiential1",provider:"experiential",name:"Experiential Labs 1",base:"https://api.experientiallabs.ai/v1",key:""}
+];
+let apiList=JSON.parse(localStorage.getItem("myLLM_apiList")||"null")||DEFAULT_APIS;
+let activeApi=localStorage.getItem("myLLM_activeApi")||apiList[0].id;
+let history=[],liveMode=false,generating=false,controller=null;
+
+const $=id=>document.getElementById(id);
+const chat=$("chat"),main=$("main"),input=$("input"),send=$("send"),apis=$("apis"),models=$("models"),live=$("live"),status=$("status");
+
+function save(){localStorage.setItem("myLLM_apiList",JSON.stringify(apiList));localStorage.setItem("myLLM_activeApi",activeApi)}
+function current(){
+ let a=apiList.find(a=>a.id===activeApi);
+ if(a&&!a.provider)a.provider=a.base.includes("experientiallabs")?"experiential":"groq";
+ return a;
+}
+function esc(s){let d=document.createElement("div");d.textContent=s;return d.innerHTML}
+function scroll(){requestAnimationFrame(()=>main.scrollTop=main.scrollHeight)}
+
+function renderApis(){
+ apis.innerHTML="";
+ apiList.forEach(a=>{let o=document.createElement("option");o.value=a.id;o.textContent=a.name+(a.key?" • Connected":" • No key");apis.appendChild(o)});
+ let add=document.createElement("option");add.value="__add__";add.textContent="＋ Add API";apis.appendChild(add);
+ apis.value=activeApi;
+}
+apis.onchange=async()=>{
+ if(apis.value==="__add__"){
+  let provider=prompt("Provider: G = Groq, E = Experiential Labs","G");
+  provider=(provider||"").trim().toLowerCase();
+  let isExp=["e","experiential","experientiallabs"].includes(provider);
+  let isGroq=["g","groq"].includes(provider);
+  if(!isExp&&!isGroq){renderApis();return}
+  let defaultName=isExp?`Experiential Labs ${apiList.filter(x=>x.provider==="experiential").length+1}`:`Groq API ${apiList.filter(x=>x.provider==="groq").length+1}`;
+  let name=prompt("API profile name:",defaultName);if(!name){renderApis();return}
+  let key=prompt(isExp?"Paste your Experiential Labs API key (xpl_...):":"Paste your Groq API key:");
+  if(!key){renderApis();return}
+  let a={id:"api_"+Date.now(),provider:isExp?"experiential":"groq",name:name.trim(),base:isExp?"https://api.experientiallabs.ai/v1":"https://api.groq.com/openai/v1",key:key.trim()};
+  apiList.push(a);activeApi=a.id;save();renderApis();await loadModels();return;
+ }
+ activeApi=apis.value;save();await loadModels();
+};
+
+/* Right-click API dropdown for rename/delete */
+apis.oncontextmenu=e=>{
+ e.preventDefault();let a=current();if(!a)return;
+ let action=prompt(`"${a.name}"\n\nType R to rename or D to delete:`,"R");
+ if(action?.toLowerCase()==="r"){let n=prompt("New name:",a.name);if(n){a.name=n.trim();save();renderApis()}}
+ if(action?.toLowerCase()==="d"&&apiList.length>1&&confirm(`Delete "${a.name}"?`)){apiList=apiList.filter(x=>x.id!==a.id);activeApi=apiList[0].id;save();renderApis();loadModels()}
+};
+
+async function loadModels(){
+ let a=current();models.innerHTML="<option>Loading models...</option>";
+ if(!a?.key){models.innerHTML="<option>Add API key first</option>";status.textContent="Select an API with a key.";return}
+ try{
+  let r=await fetch(a.base+"/models",{headers:{Authorization:"Bearer "+a.key}}),d=await r.json();
+  if(!r.ok)throw Error(d.error?.message||"Could not load models.");
+  let list=(d.data||[]).filter(x=>x.active!==false).filter(x=>!["whisper","tts","guard","orpheus"].some(k=>x.id.toLowerCase().includes(k))).sort((x,y)=>x.id.localeCompare(y.id));
+  models.innerHTML="";
+  list.forEach(x=>{let o=document.createElement("option");o.value=x.id;o.textContent=x.id;models.appendChild(o)});
+  let preferred=a.provider==="groq"?(list.find(x=>x.id==="openai/gpt-oss-120b")||list[0]):list[0];if(preferred)models.value=preferred.id;
+  status.textContent=`${a.name} • ${a.provider==="experiential"?"Experiential Labs":"Groq"} • ${list.length} models`;
+ }catch(e){models.innerHTML="<option>Connection failed</option>";status.textContent=e.message}
+}
+
+/* ================= LIVE SEARCH =================
+   Live mode calls /api/search on YOUR server.
+   Expected request: POST /api/search {"query":"..."}
+   Expected response: {"results":[{"title":"","url":"","snippet":""}]}
+*/
+live.onclick=()=>{liveMode=!liveMode;live.classList.toggle("on",liveMode);status.textContent=liveMode?"Live web search ON":"Live web search OFF"};
+
+async function searchWeb(query){
+ let r=await fetch("/api/search",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({query})});
+ let d=await r.json().catch(()=>({}));
+ if(!r.ok)throw Error(d.error||"Live search backend is unavailable.");
+ return Array.isArray(d.results)?d.results:[];
+}
+
+function sourcesHTML(results){
+ if(!results.length)return "";
+ return `<div class="sources"><div class="sourcesTitle">Web sources</div>`+
+ results.slice(0,6).map(x=>`<a class="source" href="${esc(x.url||"#")}" target="_blank" rel="noopener noreferrer"><b>${esc(x.title||"Source")}</b><small>${esc(x.url||"")}</small></a>`).join("")+"</div>";
+}
+
+/* ================= MARKDOWN ================= */
+marked.setOptions({gfm:true,breaks:true});
+function md(s){return DOMPurify.sanitize(marked.parse(s),{USE_PROFILES:{html:true}})}
+function codeButtons(el){
+ el.querySelectorAll("pre").forEach(pre=>{
+  if(pre.parentElement.classList.contains("code"))return;
+  let c=pre.querySelector("code");if(!c)return;
+  let w=document.createElement("div");w.className="code";
+  let h=document.createElement("div");h.className="codeHead";
+  let l=document.createElement("span");let m=c.className.match(/language-([\w-]+)/);l.textContent=m?m[1]:"code";
+  let b=document.createElement("button");b.className="copy";b.textContent="Copy";b.onclick=async()=>{await navigator.clipboard.writeText(c.textContent);b.textContent="Copied";setTimeout(()=>b.textContent="Copy",1000)};
+  h.append(l,b);pre.parentNode.insertBefore(w,pre);w.append(h,pre);
+ });
+}
+
+
+/* ================= VOICE V6.1 ================= */
+const voiceBtn=$("voice"), speakBtn=$("speak");
+let recognition=null, autoSpeak=false, micStream=null;
+
+const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+
+function voiceEnvironmentMessage(){
+  if(location.protocol==="file:"){
+    return "Microphone access is blocked when this HTML is opened directly as a file. Run it through localhost (for example: python -m http.server 8000) and open http://localhost:8000/my_llm_v6_voice.html.";
+  }
+  if(!window.isSecureContext && location.hostname!=="localhost" && location.hostname!=="127.0.0.1"){
+    return "Microphone access requires HTTPS or localhost.";
+  }
+  if(!SpeechRecognition){
+    return "Voice input is not supported by this browser. Try Chrome or Edge.";
+  }
+  return "";
+}
+
+async function requestMicPermission(){
+  if(!navigator.mediaDevices?.getUserMedia){
+    throw new Error("This browser does not provide microphone access.");
+  }
+  if(micStream) return true;
+  micStream=await navigator.mediaDevices.getUserMedia({audio:true});
+  micStream.getTracks().forEach(t=>t.stop());
+  micStream=null;
+  return true;
+}
+
+if(SpeechRecognition){
+  recognition=new SpeechRecognition();
+  recognition.continuous=false;
+  recognition.interimResults=true;
+  recognition.lang="en-US";
+
+  recognition.onstart=()=>{
+    voiceBtn.classList.add("listening");
+    voiceBtn.textContent="⏹️";
+    status.textContent="Listening…";
+  };
+
+  recognition.onresult=e=>{
+    let t="";
+    for(let i=e.resultIndex;i<e.results.length;i++) t+=e.results[i][0].transcript;
+    input.value=t;
+    resize();
+    if(e.results[e.results.length-1].isFinal) status.textContent="Voice captured";
+  };
+
+  recognition.onerror=e=>{
+    voiceBtn.classList.remove("listening");
+    voiceBtn.textContent="🎙️";
+    if(e.error==="not-allowed" || e.error==="service-not-allowed"){
+      status.textContent="Microphone permission denied. Use localhost/HTTPS and allow microphone access.";
+      alert(voiceEnvironmentMessage() || "Microphone permission was denied. Allow microphone access for this site in your browser settings.");
+    }else{
+      status.textContent="Voice error: "+e.error;
+    }
+  };
+
+  recognition.onend=()=>{
+    voiceBtn.classList.remove("listening");
+    voiceBtn.textContent="🎙️";
+    if(status.textContent==="Listening…") status.textContent="Ready";
+  };
+
+  voiceBtn.onclick=async()=>{
+    if(voiceBtn.classList.contains("listening")){
+      recognition.stop();
+      return;
+    }
+
+    const envMsg=voiceEnvironmentMessage();
+    if(envMsg){
+      alert(envMsg);
+      status.textContent="Voice needs localhost or HTTPS.";
+      return;
+    }
+
+    try{
+      await requestMicPermission();
+      recognition.start();
+    }catch(e){
+      status.textContent="Microphone permission denied";
+      alert("Microphone permission is required. In Chrome, open the site permissions and set Microphone to Allow, then try again.");
+    }
+  };
+}else{
+  voiceBtn.onclick=()=>alert(voiceEnvironmentMessage());
+}
+
+function speakText(text){
+  if(!("speechSynthesis" in window)){
+    alert("Speech output is not supported in this browser.");
+    return;
+  }
+  speechSynthesis.cancel();
+  let clean=text
+    .replace(/```[\s\S]*?```/g," code block ")
+    .replace(/[#>*_`~\[\]\(\)]/g," ");
+  let u=new SpeechSynthesisUtterance(clean);
+  u.rate=1.02;
+  u.pitch=1;
+  speechSynthesis.speak(u);
+}
+
+speakBtn.onclick=()=>{
+  autoSpeak=!autoSpeak;
+  speakBtn.classList.toggle("active",autoSpeak);
+  speakBtn.textContent=autoSpeak?"🔊":"🔈";
+  status.textContent=autoSpeak?"Auto voice ON":"Auto voice OFF";
+  if(!autoSpeak && "speechSynthesis" in window) speechSynthesis.cancel();
+};
+
+/* ================= CHAT ================= */
+function removeWelcome(){document.getElementById("welcome")?.remove()}
+function addUser(t){removeWelcome();let x=document.createElement("div");x.className="msg";x.innerHTML='<div class="avatar you">You</div><div class="body"><div class="content userText"></div></div>';x.querySelector(".content").textContent=t;chat.appendChild(x);scroll()}
+function addAI(){removeWelcome();let x=document.createElement("div");x.className="msg";x.innerHTML='<div class="avatar ai">AI</div><div class="body"><div class="content"><div class="typing"><i></i><i></i><i></i></div></div><div class="actions"><button class="copyResponse">Copy</button></div></div>';chat.appendChild(x);scroll();return{x,content:x.querySelector(".content"),actions:x.querySelector(".actions"),copy:x.querySelector(".copyResponse")}}
+function err(t){removeWelcome();let x=document.createElement("div");x.className="msg";x.innerHTML='<div class="avatar ai">AI</div><div class="body"><div class="content"><div class="error">'+esc(t)+'</div></div></div>';chat.appendChild(x);scroll()}
+
+async function sendMessage(){
+ let text=input.value.trim();if(!text||generating)return;
+ let a=current();if(!a?.key){err("Select an API profile with a valid Groq key.");return}
+ if(!models.value){err("Select a model.");return}
+ addUser(text);input.value="";resize();history.push({role:"user",content:text});
+ generating=true;controller=new AbortController();send.textContent="■";
+ let ai=addAI(),answer="",results=[];
+ try{
+  if(liveMode){
+   status.textContent="Searching the web…";
+   results=await searchWeb(text);
+   status.textContent=`Found ${results.length} web source${results.length===1?"":"s"}`;
+  }
+  let msgs=history.slice();
+  if(liveMode&&results.length){
+   let context=results.map((x,i)=>`SOURCE ${i+1}\nTitle: ${x.title||""}\nURL: ${x.url||""}\nSnippet: ${x.snippet||""}`).join("\n\n");
+   msgs=[{role:"system",content:"You are a helpful assistant. Use the following fresh web-search results for current facts. Do not invent information. If useful, cite sources using Markdown links.\n\n"+context},...history];
+  }
+  let r=await fetch(a.base+"/chat/completions",{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+a.key},body:JSON.stringify({model:models.value,messages:msgs,temperature:.7,max_completion_tokens:4096,stream:true}),signal:controller.signal});
+  if(!r.ok){let d=await r.json().catch(()=>({}));throw Error(d.error?.message||`Groq API error (${r.status})`)}
+  let reader=r.body.getReader(),decoder=new TextDecoder(),buf="";ai.content.innerHTML="";
+  while(true){
+   let z=await reader.read();if(z.done)break;buf+=decoder.decode(z.value,{stream:true});let lines=buf.split("\n");buf=lines.pop();
+   for(let line of lines){line=line.trim();if(!line.startsWith("data:"))continue;let raw=line.slice(5).trim();if(raw==="[DONE]")continue;try{let d=JSON.parse(raw),delta=d.choices?.[0]?.delta?.content;if(delta){answer+=delta;ai.content.textContent=answer;scroll()}}catch{}}
+  }
+  ai.content.className="content markdown";ai.content.innerHTML=md(answer);codeButtons(ai.content);
+  if(liveMode)ai.content.insertAdjacentHTML("beforeend",sourcesHTML(results));
+  if(autoSpeak)speakText(answer);
+  ai.copy.onclick=async()=>{await navigator.clipboard.writeText(answer);ai.copy.textContent="Copied";setTimeout(()=>ai.copy.textContent="Copy",1000)};
+  history.push({role:"assistant",content:answer});
+ }catch(e){
+  if(e.name==="AbortError"){if(!answer)ai.content.textContent="Generation stopped."}
+  else ai.content.innerHTML='<div class="error">'+esc(e.message)+'</div>';
+ }finally{generating=false;controller=null;send.textContent="➤";input.focus()}
+}
+
+$("new").onclick=()=>{controller?.abort();history=[];generating=false;chat.innerHTML='<div class="welcome" id="welcome"><div class="welcomeLogo">AI</div><h1>How can I help?</h1><p>Ask anything. Turn on Live for current information.</p><div class="status" id="status">Ready</div></div>';status=$("status");input.focus()};
+send.onclick=()=>generating?controller?.abort():sendMessage();
+input.onkeydown=e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendMessage()}};
+input.oninput=resize;
+document.addEventListener("keydown",e=>{if(e.ctrlKey&&e.shiftKey&&e.key.toLowerCase()==="v"&&recognition){e.preventDefault();voiceBtn.click()}});
+function resize(){input.style.height="auto";input.style.height=Math.min(input.scrollHeight,150)+"px"}
+
+renderApis();loadModels();input.focus();
+</script>
+</body>
+</html>
